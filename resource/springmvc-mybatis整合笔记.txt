@@ -1,0 +1,111 @@
+springmvc与mybatis整合
+
+一、需求
+	完成学生信息的基本增删改查
+二、整合思路
+	1、spring管理数据访问层（dao）
+		spring与MyBatis整合。spring管理mapper接口，通过mapper的扫描器自动注册mapper接口。
+	2、spring管理业务逻辑层（service）
+		注册service接口并且配置事务处理。
+	3、spring管理表示层（controller，view）
+		无需特殊配置。
+三、工程结构
+	1、所需jar包
+		1）mysql的jar包
+		2）mybatis3的jar包
+		3）spring相关jar包以及依赖包
+		4）spring整合mybatis相关的jar包
+		5）日志相关jar包
+		6）dbcp相关jar包
+		7）jstl相关jar包
+	2、包结构
+	3、配置文件（properties）
+	4、日志属性文件（properties）
+	5、MyBatis配置文件（mybatis-config.xml）
+	6、spring整合MyBatis文件，spring-mybatis.xml
+四、mapper
+	1、接口（泛型接口）
+	2、映射文件xml文件
+五、service
+六、控制器
+七、视图（jsp页面）
+八、参数绑定
+	1、自定义参数绑定
+		1）自定义转换器
+		2）配置
+九、异常处理
+	1、自定义异常处理器（HandlerExceptionResovler）
+		1）定义实现HandlerExceptionResovler的类
+		2）配置异常处理类（bean）
+十、文件上传
+	1、所需jar包
+		（1）commons-io*.*.jar
+		（2）commons-fileupload*.*.jar
+	2、form标签添加enctype属性
+		<form enctype="multipart/form-data" >
+	3、配置multipart类型解析器
+	<!-- 文件上传解析器 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="5242880" />
+	</bean>
+	4、上传路径
+	5、服务器端代码
+		// 传参 MultipartFile, HttpServletRequest
+		
+		// 上传头像
+		if(file != null){
+			String originalFileName = file.getOriginalFilename();
+			String path = request.getServletContext().getRealPath("/resources/upload/");
+			String fileName = UUID.randomUUID()+originalFileName.substring(originalFileName.lastIndexOf("."));
+
+			File newFile = new File(path+fileName);
+			
+			file.transferTo(newFile);
+			
+			student.setPhotoUrl(fileName);
+		}
+十一、json
+	1）相关jar包
+		jackson-annotations-*.*.jar
+		jackson-core-*.*.jar
+		jackson-databind-*.*.jar
+	2）配置
+		<mvc:annotation-driven />
+十二、RESTful
+	1）url（uri）
+		http://www.xxx.com/student.action?id=1
+		http://www.xxx.com/student/1
+	2）增删改查（post，delete，put，get）
+		http://www.xxx.com/student, post
+		
+		http://www.xxx.com/student/1, delete
+		
+		http://www.xxx.com/student, put
+		
+		http://www.xxx.com/student/1, get
+	3）另外一种风格
+		http://www.xxx.com/student/save, post
+		http://www.xxx.com/student/delete/1, delete
+		http://www.xxx.com/student/update, put
+		http://www.xxx.com/student/details/1, get
+		http://www.xxx.com/student/index/1, get
+		
+		index		get			获取列表
+		details		get			查看详情
+		create		get			新增页面
+		save		post		新增保存
+		edit		get			编辑页面
+		update		put			编辑保存
+		delete		delete		删除
+十二、拦截器
+	
+		
+		
+	
+	
+	
+	
+	
+	
+	
+	

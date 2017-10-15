@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.boxy.showcase.mapper.StudentMapper">
+	<resultMap id="StudentMap" type="Student">
+		<id property="id" column="id" />
+		<result property="studentNumber" column="student_number" />
+		<result property="studentName" column="student_name" />
+		<result property="gender" column="gender" />
+		<result property="birthday" column="birthday" />
+		<result property="street" column="street" />
+		<result property="city" column="city" />
+		<result property="province" column="province" />
+		<result property="photoUrl" column="photo_url" />
+	</resultMap>
+
+	<sql id="noneKeyColumns">
+		<![CDATA[
+		student_number, student_name, gender, birthday, street, city, province, photo_url
+		]]>
+	</sql>
+
+	<!-- 添加数据 -->
+	<insert id="add" parameterType="Student" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			insert into students(
+		]]>
+		<include refid="noneKeyColumns" />
+		<![CDATA[
+			) values (#{studentNumber}, #{studentName}, #{gender}, #{birthday}, #{street}, #{city}, #{province}, #{photoUrl})
+		]]>
+	</insert>
+
+	<!-- 修改记录 -->
+	<update id="update">
+		<![CDATA[
+			update 	students
+			set		student_number	= #{studentNumber},
+					student_name	= #{studentName},
+					gender			= #{gender},
+					birthday		= #{birthday},
+					street			= #{street},
+					city			= #{city},
+					province		= #{province},
+					photo_url		= #{photoUrl}
+			where	id				= #{id}
+		]]>
+	</update>
+
+	<!-- 删除一条记录 -->
+	<delete id="delete" parameterType="int">
+		<![CDATA[
+			delete from students where id = #{id}
+		]]>
+	</delete>
+
+	<!-- 根据id查找记录 -->
+	<select id="find" parameterType="int" resultMap="StudentMap">
+		<![CDATA[
+			select * from students where id = #{id}
+		]]>
+	</select>
+
+	<!-- 根据姓名查找数据 -->
+	<select id="findByName" parameterType="string" resultMap="StudentMap">
+		<![CDATA[
+			select * from students where student_name = #{name}
+		]]>
+	</select>
+
+	<!-- 获取总记录数 -->
+	<select id="totalCount" resultType="long">
+		<![CDATA[
+			select count(*) from students
+		]]>
+	</select>
+
+	<!-- 分页查询 -->
+	<select id="findPage" resultMap="StudentMap">
+		<![CDATA[
+			select * from students limit #{firstResult}, #{maxResult}
+		]]>
+	</select>
+
+	<!-- 查找所有数据 -->
+	<select id="findAll" resultMap="StudentMap">
+		<![CDATA[
+			select * from students
+		]]>
+	</select>
+</mapper>
